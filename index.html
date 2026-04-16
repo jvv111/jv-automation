@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JV Automation AI trainingen voor het MKB</title>
+    <meta name="description" content="Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================
+           CSS Variables   Dark Theme
+           (swap these for light mode)
+           =========================== */
+        :root {
+            --bg-primary: #0D0B08;
+            --bg-secondary: #141210;
+            --bg-card: #1A1815;
+            --bg-card-hover: #211E1A;
+            --text-primary: #E8E4DF;
+            --text-secondary: #A39E96;
+            --text-muted: #6B6055;
+            --accent: #B8845C;
+            --accent-hover: #C99570;
+            --accent-dark: #8C5E3A;
+            --accent-dark-hover: #A06E45;
+            --border: rgba(232, 228, 223, 0.08);
+            --border-hover: rgba(232, 228, 223, 0.15);
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Instrument Serif', Georgia, serif;
+            --max-width: 1120px;
+            --nav-height: 72px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===========================
+           Reset & Base
+           =========================== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+        }
+        a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+        a:hover { color: var(--accent-hover); }
+        h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; line-height: 1.2; color: var(--text-primary); }
+        h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); }
+        h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+        h3 { font-size: 1.3rem; }
+        h1 em { font-style: italic; color: var(--accent); }
+        img { max-width: 100%; display: block; }
+        .container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+        /* ===========================
+           Navigation
+           =========================== */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            height: var(--nav-height); display: flex; align-items: center;
+            background: rgba(13, 11, 8, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .jv-logo { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+        .jv-logo__j { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 36px; color: #C87941; line-height: 1; }
+        .jv-logo__v { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 36px; color: #ffffff; line-height: 1; }
+        .jv-logo__divider { width: 2px; height: 22px; background: #C87941; margin: 0 10px; }
+        .jv-logo__name { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; color: #ffffff; letter-spacing: 1px; }
+        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+        .nav-links a {
+            font-size: 0.9rem; font-weight: 500; color: var(--text-secondary);
+            transition: color var(--transition); position: relative; cursor: pointer;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--accent); transition: width var(--transition);
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-cta {
+            background: var(--accent-dark); color: var(--text-primary) !important;
+            padding: 10px 22px; border-radius: var(--radius-sm);
+            transition: background var(--transition), transform var(--transition) !important;
+        }
+        .nav-cta::after { display: none !important; }
+        .nav-cta:hover { background: var(--accent-dark-hover) !important; transform: translateY(-1px); }
+        .nav-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer; padding: 4px;
+        }
+        .nav-toggle span { width: 22px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: var(--transition); }
+        .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ===========================
+           Pages (show/hide)
+           =========================== */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ===========================
+           Hero
+           =========================== */
+        .hero {
+            min-height: 90vh; display: flex; align-items: center;
+            padding-top: var(--nav-height); position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(184, 132, 92, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-content { max-width: 680px; }
+        .hero-label {
+            font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--accent); margin-bottom: 20px;
+        }
+        .hero h1 { margin-bottom: 24px; }
+        .hero-sub { font-size: 1.15rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 40px; max-width: 560px; }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+        /* ===========================
+           Buttons
+           =========================== */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
+            padding: 14px 32px; border-radius: var(--radius-sm); border: none;
+            cursor: pointer; transition: all var(--transition); text-decoration: none;
+        }
+        .btn-primary { background: var(--accent-dark); color: var(--text-primary); }
+        .btn-primary:hover {
+            background: var(--accent-dark-hover); color: var(--text-primary);
+            transform: translateY(-2px); box-shadow: 0 8px 30px rgba(140, 94, 58, 0.25);
+        }
+        .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-hover); }
+        .btn-ghost:hover { color: var(--text-primary); border-color: var(--accent); background: rgba(184, 132, 92, 0.05); }
+        .btn-lg { padding: 18px 40px; font-size: 1rem; }
+
+        /* ===========================
+           Sections
+           =========================== */
+        .section { padding: 100px 0; }
+        .section-alt { background: var(--bg-secondary); }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
+        .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+        .section-intro { font-size: 1.05rem; color: var(--text-secondary); margin-top: 16px; line-height: 1.8; }
+
+        /* ===========================
+           Feature Cards
+           =========================== */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 36px 30px; transition: all var(--transition);
+        }
+        .feature-card:hover { background: var(--bg-card-hover); border-color: var(--border-hover); transform: translateY(-4px); }
+        .feature-icon {
+            width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-sm); background: rgba(184, 132, 92, 0.1); color: var(--accent); margin-bottom: 20px;
+        }
+        .feature-card h3 { margin-bottom: 10px; font-family: var(--font-body); font-weight: 600; font-size: 1.1rem; }
+        .feature-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+
+        /* ===========================
+           Steps
+           =========================== */
+        .steps { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; }
+        .step { display: flex; gap: 28px; padding: 32px 0; border-bottom: 1px solid var(--border); transition: all var(--transition); }
+        .step:last-child { border-bottom: none; }
+        .step:hover { padding-left: 8px; }
+        .step-number {
+            font-family: var(--font-heading); font-size: 2rem; color: var(--accent);
+            line-height: 1; min-width: 48px; padding-top: 2px; opacity: 0.6; transition: opacity var(--transition);
+        }
+        .step:hover .step-number { opacity: 1; }
+        .step-content h3 { font-family: var(--font-body); font-weight: 600; font-size: 1.05rem; margin-bottom: 6px; }
+        .step-content p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* ===========================
+           CTA Section
+           =========================== */
+        .cta-section { padding: 80px 0; }
+        .cta-block {
+            text-align: center; max-width: 540px; margin: 0 auto; padding: 64px 40px;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+        }
+        .cta-block h2 { margin-bottom: 16px; }
+        .cta-block p { color: var(--text-secondary); margin-bottom: 32px; font-size: 1.05rem; }
+
+        /* ===========================
+           Page Hero (sub-pages)
+           =========================== */
+        .page-hero { padding: 160px 0 60px; }
+        .page-hero h1 { font-size: clamp(2rem, 4vw, 3rem); }
+
+        /* ===========================
+           About Layout
+           =========================== */
+        .about-layout { display: grid; grid-template-columns: 280px 1fr; gap: 64px; align-items: start; }
+        .photo-placeholder {
+            width: 100%; aspect-ratio: 3 / 4; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 12px; color: var(--text-muted);
+        }
+        .photo-placeholder svg { opacity: 0.4; }
+        .photo-placeholder span { font-size: 0.85rem; }
+        .about-lead { font-size: 1.15rem; line-height: 1.8; color: var(--text-primary); margin-bottom: 20px; }
+        .about-text p { color: var(--text-secondary); margin-bottom: 20px; font-size: 0.98rem; }
+        .about-text h3 {
+            font-family: var(--font-body); font-weight: 600; font-size: 1.05rem;
+            color: var(--accent); margin-bottom: 8px; margin-top: 32px;
+        }
+
+        /* ===========================
+           Contact Layout
+           =========================== */
+        .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+        .contact-intro { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 40px; }
+        .contact-methods { display: flex; flex-direction: column; gap: 24px; }
+        .contact-method { display: flex; align-items: center; gap: 16px; }
+        .contact-icon {
+            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-sm); background: rgba(184, 132, 92, 0.1); color: var(--accent); flex-shrink: 0;
+        }
+        .contact-method-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 2px; }
+        .contact-method-value { font-size: 0.95rem; font-weight: 500; }
+        .calendly-placeholder { min-height: 500px; }
+        .calendly-mock {
+            width: 100%; min-height: 500px; background: var(--bg-card); border: 1px dashed var(--border-hover);
+            border-radius: var(--radius-md); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 12px;
+            color: var(--text-muted); text-align: center; padding: 40px;
+        }
+        .calendly-mock-icon { opacity: 0.4; margin-bottom: 8px; }
+        .calendly-mock p { font-size: 0.95rem; color: var(--text-secondary); }
+        .calendly-mock span { font-size: 0.8rem; }
+
+        /* ===========================
+           Footer
+           =========================== */
+        .footer { padding: 60px 0 32px; border-top: 1px solid var(--border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: start; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; }
+        .footer-links { display: flex; gap: 28px; }
+        .footer-links a { font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+        .footer-links a:hover { color: var(--text-primary); }
+        .footer-contact a { font-size: 0.9rem; color: var(--text-secondary); }
+        .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; }
+        .footer-bottom p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ===========================
+           Training Hero
+           =========================== */
+        .training-hero-meta {
+            display: flex; gap: 32px; flex-wrap: wrap;
+            margin-top: 36px; padding-top: 36px;
+            border-top: 1px solid var(--border);
+        }
+        .training-meta-item { display: flex; flex-direction: column; gap: 4px; }
+        .training-meta-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .training-meta-value { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); }
+
+        /* ===========================
+           Programma
+           =========================== */
+        .program-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 2px; background: var(--border);
+            border-radius: var(--radius-md); overflow: hidden;
+        }
+        .program-item {
+            background: var(--bg-card); padding: 28px 32px;
+            display: flex; gap: 20px; align-items: flex-start;
+            transition: background var(--transition);
+        }
+        .program-item:hover { background: var(--bg-card-hover); }
+        .program-num {
+            font-family: var(--font-heading); font-size: 1.6rem;
+            color: var(--accent); opacity: 0.45; line-height: 1;
+            min-width: 32px; padding-top: 3px; transition: opacity var(--transition);
+        }
+        .program-item:hover .program-num { opacity: 0.9; }
+        .program-body h3 { font-family: var(--font-body); font-weight: 600; font-size: 1rem; margin-bottom: 6px; color: var(--text-primary); }
+        .program-body p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ===========================
+           Voor wie
+           =========================== */
+        .doelgroep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .doelgroep-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 32px 28px; transition: all var(--transition);
+        }
+        .doelgroep-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+        .doelgroep-icon {
+            width: 44px; height: 44px; border-radius: var(--radius-sm);
+            background: rgba(184, 132, 92, 0.1); color: var(--accent);
+            display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+        }
+        .doelgroep-card h3 { font-family: var(--font-body); font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+        .doelgroep-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ===========================
+           Wat je meeneemt
+           =========================== */
+        .takeaways { max-width: 720px; margin: 0 auto; }
+        .takeaway {
+            display: flex; gap: 20px; align-items: flex-start;
+            padding: 24px 0; border-bottom: 1px solid var(--border);
+        }
+        .takeaway:last-child { border-bottom: none; }
+        .takeaway-check {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(184, 132, 92, 0.12); color: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 2px;
+        }
+        .takeaway p { font-size: 0.97rem; color: var(--text-secondary); line-height: 1.7; }
+        .takeaway p strong { color: var(--text-primary); font-weight: 600; }
+
+        /* ===========================
+           Animations
+           =========================== */
+        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===========================
+           Responsive
+           =========================== */
+        @media (max-width: 900px) {
+            .features-grid { grid-template-columns: 1fr; gap: 16px; }
+            .about-layout { grid-template-columns: 1fr; gap: 40px; }
+            .about-photo { max-width: 220px; }
+            .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+            .footer-content { flex-direction: column; gap: 24px; }
+            .program-grid { grid-template-columns: 1fr; }
+            .doelgroep-grid { grid-template-columns: 1fr; gap: 16px; }
+        }
+        @media (max-width: 680px) {
+            .nav-toggle { display: flex; }
+            .training-hero-meta { gap: 20px; }
+            .nav-links {
+                position: fixed; top: var(--nav-height); left: 0; right: 0;
+                background: rgba(13, 11, 8, 0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+                flex-direction: column; padding: 32px 24px; gap: 20px;
+                transform: translateY(-120%); opacity: 0;
+                transition: transform 0.4s ease, opacity 0.3s ease;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.open { transform: translateY(0); opacity: 1; }
+            .nav-cta { text-align: center; width: 100%; }
+            .hero { min-height: 80vh; }
+            .hero-actions { flex-direction: column; }
+            .hero-actions .btn { width: 100%; text-align: center; }
+            .section { padding: 72px 0; }
+            .cta-block { padding: 48px 24px; }
+            .step { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== NAVIGATION ====== -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="jv-logo" onclick="showPage('home')" aria-label="JV Automation - home">
+                <span class="jv-logo__j">J</span><span class="jv-logo__v">V</span>
+                <div class="jv-logo__divider"></div>
+                <span class="jv-logo__name">Automation</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu openen">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" data-page="home" class="active" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" data-page="trainingen" onclick="showPage('trainingen')">Training</a></li>
+                <li><a href="#" data-page="over" onclick="showPage('over')">Over mij</a></li>
+                <li><a href="#" data-page="contact" class="nav-cta" onclick="showPage('contact')">Plan een gesprek</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+         PAGE: HOME
+         ============================================================ -->
+    <div class="page active" id="page-home">
+
+        <!-- Hero -->
+        <header class="hero">
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <p class="hero-label">AI trainingen voor het MKB</p>
+                    <h1>Je team productief met AI <em>zonder de complexiteit</em></h1>
+                    <p class="hero-sub">Praktische, hands-on AI trainingen die je medewerkers direct kunnen toepassen in hun dagelijkse werk. Geen theorie, maar resultaat.</p>
+                    <div class="hero-actions">
+                        <a href="#" class="btn btn-primary" onclick="showPage('contact')">Plan een vrijblijvend gesprek</a>
+                        <a href="#aanpak" class="btn btn-ghost">Bekijk de aanpak</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Trainingen -->
+        <section class="section" id="trainingen">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Het kernproduct</p>
+                    <h2>AI trainingen op maat</h2>
+                    <p class="section-intro">Medewerkers zitten vol praktische AI vragen, maar bestaande trainingen blijven vaak hangen in theorie. Ik geef trainingen die aansluiten op hoe je team écht werkt op locatie, met oefeningen die dezelfde dag nog toepasbaar zijn.</p>
+                </div>
+                <div class="features-grid fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3>Op maat voor jouw team</h3>
+                        <p>Elke training wordt afgestemd op de specifieke processen, tools en uitdagingen van jouw bedrijf.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <h3>Direct toepasbaar</h3>
+                        <p>Geen slides vol theorie, maar praktische oefeningen met de tools die je team dagelijks kan gebruiken.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <h3>Op locatie</h3>
+                        <p>Ik kom naar jouw kantoor en train je team in de eigen werkomgeving daar waar het geleerde direct toegepast wordt.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Aanpak -->
+        <section class="section section-alt" id="aanpak">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Hoe ik werk</p>
+                    <h2>Van kennismaking tot resultaat</h2>
+                </div>
+                <div class="steps fade-in">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Kennismaking</h3>
+                            <p>Tijdens een vrijblijvend gesprek bespreken we jouw uitdagingen en verkennen we samen de mogelijkheden.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Plan op maat</h3>
+                            <p>Je ontvangt een concreet voorstel met de beste AI-kansen voor jouw situatie en een duidelijke aanpak.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Training</h3>
+                            <p>Ik train je team op locatie, met praktische oefeningen die direct toepasbaar zijn.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Nazorg</h3>
+                            <p>Na de training blijf ik beschikbaar voor vragen, zodat de kennis goed landt in de praktijk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section cta-section">
+            <div class="container">
+                <div class="cta-block fade-in">
+                    <h2>Klaar om je team te laten groeien met AI?</h2>
+                    <p>Plan een vrijblijvend kennismakingsgesprek en ontdek wat AI kan betekenen voor jouw bedrijf.</p>
+                    <a href="#" class="btn btn-primary btn-lg" onclick="showPage('contact')">Plan een gesprek</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============================================================
+         PAGE: OVER MIJ
+         ============================================================ -->
+    <div class="page" id="page-over">
+
+        <header class="page-hero">
+            <div class="container">
+                <div class="page-hero-content fade-in">
+                    <p class="section-label">Over mij</p>
+                    <h1>Jop van JV Automation</h1>
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <div class="container">
+                <div class="about-layout fade-in">
+                    <div class="about-photo">
+                        <div class="photo-placeholder">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span>Foto volgt</span>
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <p class="about-lead">Ik help MKB-bedrijven om AI praktisch in te zetten in hun dagelijkse werk. Geen eindeloze theoretische verhalen, maar hands-on begeleiding die je team direct productiever maakt.</p>
+                        <p>Mijn aanpak is persoonlijk en resultaatgericht. Ik geloof dat AI pas echt waardevol wordt wanneer het aansluit op de manier waarop jij en je team al werken niet als losstaand project, maar als versterking van wat er al goed gaat.</p>
+                        <h3>Waarom ik dit doe</h3>
+                        <p>Ik zag dat medewerkers bij bedrijven vol zitten met praktische AI vragen, maar dat bestaande trainingen blijven hangen in theorie. Dat gat vul ik.</p>
+                        <h3>Wat mijn aanpak anders maakt</h3>
+                        <p>Ik werk niet met standaard lespakketten. Elke training is afgestemd op jouw dagelijkse werk, met oefeningen die je team dezelfde dag nog kan toepassen. Praktisch, hands-on, en persoonlijk.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <div class="container">
+                <div class="cta-block fade-in">
+                    <h2>Benieuwd wat AI kan betekenen voor jouw team?</h2>
+                    <p>Laten we kennismaken. Ik vertel je graag meer over mijn aanpak.</p>
+                    <a href="#" class="btn btn-primary btn-lg" onclick="showPage('contact')">Neem contact op</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============================================================
+         PAGE: TRAININGEN
+         ============================================================ -->
+    <div class="page" id="page-trainingen">
+
+        <header class="page-hero">
+            <div class="container">
+                <div class="page-hero-content fade-in">
+                    <p class="section-label">Training</p>
+                    <h1>AI <em>écht</em> laten werken in jouw organisatie</h1>
+                    <p style="margin-top:20px; font-size:1.1rem; color:var(--text-secondary); max-width:600px; line-height:1.8;">
+                        Veel bedrijven gebruiken AI al een beetje. Ze stellen een vraag, krijgen een antwoord, en denken: "het is oké, maar de output is net niet goed." Dat gat dicht ik in één dag.
+                    </p>
+                    <div class="training-hero-meta">
+                        <div class="training-meta-item">
+                            <span class="training-meta-label">Format</span>
+                            <span class="training-meta-value">Groepstraining op locatie</span>
+                        </div>
+                        <div class="training-meta-item">
+                            <span class="training-meta-label">Duur</span>
+                            <span class="training-meta-value">Dagdeel</span>
+                        </div>
+                        <div class="training-meta-item">
+                            <span class="training-meta-label">Niveau</span>
+                            <span class="training-meta-value">Geen voorkennis vereist</span>
+                        </div>
+                        <div class="training-meta-item">
+                            <span class="training-meta-label">Aanpak</span>
+                            <span class="training-meta-value">Grotendeels praktisch, maar wel met de benodigde theorie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Het probleem</p>
+                    <h2>AI gebruiken is één ding. Het goed gebruiken is een tweede.</h2>
+                    <p class="section-intro">
+                        Organisaties lopen nu massaal tegen hetzelfde probleem aan: medewerkers proberen AI, maar de output stelt teleur. Niet omdat AI niet goed genoeg is, maar omdat niemand ze heeft geleerd hoe je er echt mee werkt. Die kennis geef ik in deze training.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Programma</p>
+                    <h2>Wat we behandelen</h2>
+                    <p class="section-intro">Van de basis tot de mogelijkheden die de meeste mensen nog nooit hebben gezien.</p>
+                </div>
+                <div class="program-grid fade-in">
+
+                    <div class="program-item">
+                        <div class="program-num">1</div>
+                        <div class="program-body">
+                            <h3>Wat is AI en wat niet?</h3>
+                            <p>Een heldere basisuitleg. Wat doet AI precies, welke soorten bestaan er, en waarom zijn large language models zo anders dan eerdere technologie?</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">2</div>
+                        <div class="program-body">
+                            <h3>Hoe werkt een taalmodel?</h3>
+                            <p>Geen technische diepte, maar genoeg begrip om te snappen waarom het model doet wat het doet en hoe je dat stuurt.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">3</div>
+                        <div class="program-body">
+                            <h3>De kunst van de prompt</h3>
+                            <p>Wat is een prompt, wat maakt hem goed, en hoe schrijf je er één die consistente resultaten geeft? We oefenen live, met jouw eigen werkvoorbeelden.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">4</div>
+                        <div class="program-body">
+                            <h3>Prompts standaardiseren</h3>
+                            <p>Hoe zorg je dat terugkerende taken niet elke keer opnieuw uitgeschreven hoeven te worden? We bouwen samen herbruikbare prompt-templates.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">5</div>
+                        <div class="program-body">
+                            <h3>Systeemprompts & projecten</h3>
+                            <p>De meeste gebruikers kennen dit niet. Systeemprompts en projecten laten je AI een vaste rol geven, zodat het altijd werkt zoals jij dat wilt, zonder telkens opnieuw te beginnen.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">6</div>
+                        <div class="program-body">
+                            <h3>De volledige potentie benutten</h3>
+                            <p>Je betaalt al voor het model, gebruik het dan ook volledig. We laten zien wat er mogelijk is: van presentaties en analyses tot opnames verwerken en documenten samenvatten.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">7</div>
+                        <div class="program-body">
+                            <h3>Agents: wat komt eraan?</h3>
+                            <p>Een bondig overzicht van AI-agents: wat het zijn, wat ze al kunnen, en waarom dit relevant wordt voor jouw organisatie.</p>
+                        </div>
+                    </div>
+
+                    <div class="program-item">
+                        <div class="program-num">8</div>
+                        <div class="program-body">
+                            <h3>Wetgeving & toekomstvisie</h3>
+                            <p>Wat speelt er rondom de EU AI Act, wat moet je als organisatie weten, en waar gaat dit de komende jaren naartoe? Praktisch, zonder hype.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Voor wie</p>
+                    <h2>Deze training is voor jou als...</h2>
+                </div>
+                <div class="doelgroep-grid fade-in">
+
+                    <div class="doelgroep-card">
+                        <div class="doelgroep-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3>Medewerkers & teams</h3>
+                        <p>Je gebruikt AI af en toe, maar het levert nog niet wat je ervan verwacht. Na deze training weet je precies hoe je het wél laat werken.</p>
+                    </div>
+
+                    <div class="doelgroep-card">
+                        <div class="doelgroep-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                        <h3>Ondernemers & directeuren</h3>
+                        <p>Je wil weten wat er écht mogelijk is, welke processen je kunt automatiseren, en hoe je als organisatie niet achterop raakt.</p>
+                    </div>
+
+                    <div class="doelgroep-card">
+                        <div class="doelgroep-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <h3>Complete beginners</h3>
+                        <p>Je hebt nauwelijks ervaring met AI maar wil weten waar alle aandacht over gaat en wat het voor jouw werk kan betekenen. Geen voorkennis nodig.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <p class="section-label">Na de training</p>
+                    <h2>Wat je meeneemt</h2>
+                </div>
+                <div class="takeaways fade-in">
+
+                    <div class="takeaway">
+                        <div class="takeaway-check">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p><strong>Begrip van hoe AI echt werkt</strong> zodat je niet meer gist, maar stuurt.</p>
+                    </div>
+
+                    <div class="takeaway">
+                        <div class="takeaway-check">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p><strong>Een ingericht project of systeemprompt</strong> dat je morgen al in gebruik kunt nemen.</p>
+                    </div>
+
+                    <div class="takeaway">
+                        <div class="takeaway-check">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p><strong>Overzicht van andere AI-tools</strong> die relevant zijn voor jouw branche en werkwijze.</p>
+                    </div>
+
+                    <div class="takeaway">
+                        <div class="takeaway-check">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p><strong>Inzicht in de huidige stand van AI-wetgeving</strong> zodat je weet waar je aan toe bent.</p>
+                    </div>
+
+                    <div class="takeaway">
+                        <div class="takeaway-check">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p><strong>Nazorg</strong> na de training blijf ik beschikbaar voor vragen, zodat de kennis ook echt landt.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section" style="background: var(--bg-secondary);">
+            <div class="container">
+                <div class="cta-block fade-in">
+                    <h2>Interesse in deze training voor jouw team?</h2>
+                    <p>Laten we even kennismaken. Dan kijk ik met je mee naar wat het beste past bij jullie situatie.</p>
+                    <a href="#" class="btn btn-primary btn-lg" onclick="showPage('contact')">Plan een vrijblijvend gesprek</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ============================================================
+         PAGE: CONTACT
+         ============================================================ -->
+    <div class="page" id="page-contact">
+
+        <header class="page-hero">
+            <div class="container">
+                <div class="page-hero-content fade-in">
+                    <p class="section-label">Contact</p>
+                    <h1>Laten we kennismaken</h1>
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <div class="container">
+                <div class="contact-layout fade-in">
+                    <div class="contact-info">
+                        <p class="contact-intro">Stuur een mail om een kennismakingsgesprek in te plannen.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="contact-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                </div>
+                                <div>
+                                    <p class="contact-method-label">E-mail</p>
+                                    <a href="mailto:info@jvautomation.nl" class="contact-method-value">info@jvautomation.nl</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====== FOOTER (shared) ====== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="jv-logo" onclick="showPage('home')" aria-label="JV Automation - home">
+                        <span class="jv-logo__j">J</span><span class="jv-logo__v">V</span>
+                        <div class="jv-logo__divider"></div>
+                        <span class="jv-logo__name">Automation</span>
+                    </a>
+                    <p>Praktische AI trainingen voor het MKB</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" onclick="showPage('home')">Home</a>
+                    <a href="#" onclick="showPage('trainingen')">Training</a>
+                    <a href="#" onclick="showPage('over')">Over mij</a>
+                    <a href="#" onclick="showPage('contact')">Contact</a>
+                </div>
+                <div class="footer-contact">
+                    <a href="mailto:info@jvautomation.nl">info@jvautomation.nl</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 JV Automation. Alle rechten voorbehouden.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===========================
+        // Page navigation
+        // ===========================
+        function showPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show target page
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+
+            // Update nav active state
+            document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+                a.classList.toggle('active', a.dataset.page === page);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Close mobile nav
+            document.getElementById('navToggle').classList.remove('active');
+            document.getElementById('navLinks').classList.remove('open');
+
+            // Re-trigger fade-in animations
+            setTimeout(() => {
+                document.querySelectorAll('#page-' + page + ' .fade-in').forEach(el => {
+                    observer.unobserve(el);
+                    el.classList.remove('visible');
+                    observer.observe(el);
+                });
+            }, 50);
+        }
+
+        // ===========================
+        // Mobile nav toggle
+        // ===========================
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        // ===========================
+        // Fade-in on scroll
+        // ===========================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ===========================
+        // Smooth scroll for anchors
+        // ===========================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const id = this.getAttribute('href');
+                if (id === '#') return;
+                const t = document.querySelector(id);
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+    </script>
+</body>
+</html>
