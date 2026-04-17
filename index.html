@@ -436,7 +436,7 @@
             </button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" data-page="home" class="active" onclick="showPage('home')">Home</a></li>
-                <li><a href="#" data-page="trainingen" onclick="showPage('trainingen')">Training</a></li>
+                <li><a href="#" data-page="trainingen" onclick="showPage('trainingen')">AI training</a></li>
                 <li><a href="#" data-page="over" onclick="showPage('over')">Over mij</a></li>
                 <li><a href="#" data-page="contact" class="nav-cta" onclick="showPage('contact')">Plan een gesprek</a></li>
             </ul>
@@ -864,7 +864,7 @@
                 </div>
                 <div class="footer-links">
                     <a href="#" onclick="showPage('home')">Home</a>
-                    <a href="#" onclick="showPage('trainingen')">Training</a>
+                    <a href="#" onclick="showPage('trainingen')">AI training</a>
                     <a href="#" onclick="showPage('over')">Over mij</a>
                     <a href="#" onclick="showPage('contact')">Contact</a>
                 </div>
@@ -891,17 +891,17 @@
             trainingen: {
                 title: 'AI Training voor jouw organisatie | JV Automation',
                 description: 'Leer hoe je AI écht laat werken in jouw organisatie. Groepstraining op locatie, hands-on en direct toepasbaar. Geen voorkennis vereist.',
-                canonical: 'https://www.jvautomation.nl/#trainingen'
+                canonical: 'https://www.jvautomation.nl/trainingen'
             },
             over: {
                 title: 'Over Jop van JV Automation | AI trainer voor het MKB',
                 description: 'Jop van JV Automation helpt MKB-bedrijven AI praktisch in te zetten. Persoonlijk, hands-on en resultaatgericht, afgestemd op jouw dagelijkse werk.',
-                canonical: 'https://www.jvautomation.nl/#over'
+                canonical: 'https://www.jvautomation.nl/over'
             },
             contact: {
                 title: 'Contact & Kennismaking | JV Automation',
                 description: 'Plan een vrijblijvend kennismakingsgesprek met JV Automation. Ontdek wat AI kan betekenen voor jouw bedrijf.',
-                canonical: 'https://www.jvautomation.nl/#contact'
+                canonical: 'https://www.jvautomation.nl/contact'
             }
         };
 
@@ -932,7 +932,7 @@
 
             // Update meta tags and URL
             updateMeta(page);
-            history.replaceState(null, '', page === 'home' ? location.pathname : location.pathname + '#' + page);
+            history.replaceState(null, '', page === 'home' ? '/' : '/' + page);
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'instant' });
