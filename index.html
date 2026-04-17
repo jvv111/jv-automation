@@ -3,8 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JV Automation AI trainingen voor het MKB</title>
-    <meta name="description" content="Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit.">
+    <title>JV Automation | AI trainingen voor het MKB</title>
+    <meta name="description" content="Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit. Op locatie, hands-on en direct toepasbaar.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://www.jvautomation.nl/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.jvautomation.nl/">
+    <meta property="og:title" content="JV Automation | AI trainingen voor het MKB">
+    <meta property="og:description" content="Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit. Op locatie, hands-on en direct toepasbaar.">
+    <meta property="og:locale" content="nl_NL">
+    <meta property="og:site_name" content="JV Automation">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JV Automation | AI trainingen voor het MKB">
+    <meta name="twitter:description" content="Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit.">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "JV Automation",
+      "description": "Praktische AI trainingen voor MKB-bedrijven. Hands-on groepstrainingen op locatie zodat medewerkers AI direct kunnen toepassen in hun dagelijks werk.",
+      "url": "https://www.jvautomation.nl",
+      "email": "info@jvautomation.nl",
+      "priceRange": "€€",
+      "areaServed": "NL",
+      "serviceType": "AI training",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "AI Trainingen",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "EducationalOccupationalProgram",
+              "name": "AI Training voor teams",
+              "description": "Groepstraining op locatie waarmee medewerkers AI écht leren toepassen in hun dagelijkse werk. Van basisuitleg tot prompts, systeemprompts en praktische oefeningen.",
+              "timeToComplete": "PT4H",
+              "educationalLevel": "Geen voorkennis vereist"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
@@ -832,6 +880,44 @@
 
     <script>
         // ===========================
+        // Page metadata per page
+        // ===========================
+        const pageMeta = {
+            home: {
+                title: 'JV Automation | AI trainingen voor het MKB',
+                description: 'Praktische AI trainingen voor MKB-bedrijven. Maak uw team productief met AI zonder de complexiteit. Op locatie, hands-on en direct toepasbaar.',
+                canonical: 'https://www.jvautomation.nl/'
+            },
+            trainingen: {
+                title: 'AI Training voor jouw organisatie | JV Automation',
+                description: 'Leer hoe je AI écht laat werken in jouw organisatie. Groepstraining op locatie, hands-on en direct toepasbaar. Geen voorkennis vereist.',
+                canonical: 'https://www.jvautomation.nl/#trainingen'
+            },
+            over: {
+                title: 'Over Jop van JV Automation | AI trainer voor het MKB',
+                description: 'Jop van JV Automation helpt MKB-bedrijven AI praktisch in te zetten. Persoonlijk, hands-on en resultaatgericht, afgestemd op jouw dagelijkse werk.',
+                canonical: 'https://www.jvautomation.nl/#over'
+            },
+            contact: {
+                title: 'Contact & Kennismaking | JV Automation',
+                description: 'Plan een vrijblijvend kennismakingsgesprek met JV Automation. Ontdek wat AI kan betekenen voor jouw bedrijf.',
+                canonical: 'https://www.jvautomation.nl/#contact'
+            }
+        };
+
+        function updateMeta(page) {
+            const meta = pageMeta[page] || pageMeta.home;
+            document.title = meta.title;
+            document.querySelector('meta[name="description"]').setAttribute('content', meta.description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', meta.title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', meta.description);
+            document.querySelector('meta[property="og:url"]').setAttribute('content', meta.canonical);
+            document.querySelector('meta[name="twitter:title"]').setAttribute('content', meta.title);
+            document.querySelector('meta[name="twitter:description"]').setAttribute('content', meta.description);
+            document.querySelector('link[rel="canonical"]').setAttribute('href', meta.canonical);
+        }
+
+        // ===========================
         // Page navigation
         // ===========================
         function showPage(page) {
@@ -845,6 +931,11 @@
             document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
                 a.classList.toggle('active', a.dataset.page === page);
             });
+
+            // Update meta tags and URL hash
+            updateMeta(page);
+            const hash = page === 'home' ? '' : '#' + page;
+            history.pushState({ page }, '', window.location.pathname + hash);
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -861,6 +952,19 @@
                     observer.observe(el);
                 });
             }, 50);
+        }
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', (e) => {
+            const page = (e.state && e.state.page) || 'home';
+            showPage(page);
+        });
+
+        // Load correct page based on URL hash on first visit
+        const initialHash = window.location.hash.replace('#', '');
+        const validPages = ['home', 'trainingen', 'over', 'contact'];
+        if (initialHash && validPages.includes(initialHash)) {
+            showPage(initialHash);
         }
 
         // ===========================
