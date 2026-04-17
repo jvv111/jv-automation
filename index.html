@@ -930,8 +930,9 @@
                 a.classList.toggle('active', a.dataset.page === page);
             });
 
-            // Update meta tags
+            // Update meta tags and URL
             updateMeta(page);
+            history.replaceState(null, '', page === 'home' ? location.pathname : location.pathname + '#' + page);
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -979,7 +980,7 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const id = this.getAttribute('href');
-                if (id === '#') return;
+                if (id === '#') { e.preventDefault(); return; }
                 const t = document.querySelector(id);
                 if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
