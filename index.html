@@ -911,10 +911,8 @@
             document.querySelector('meta[name="description"]').setAttribute('content', meta.description);
             document.querySelector('meta[property="og:title"]').setAttribute('content', meta.title);
             document.querySelector('meta[property="og:description"]').setAttribute('content', meta.description);
-            document.querySelector('meta[property="og:url"]').setAttribute('content', meta.canonical);
             document.querySelector('meta[name="twitter:title"]').setAttribute('content', meta.title);
             document.querySelector('meta[name="twitter:description"]').setAttribute('content', meta.description);
-            document.querySelector('link[rel="canonical"]').setAttribute('href', meta.canonical);
         }
 
         // ===========================
@@ -932,10 +930,8 @@
                 a.classList.toggle('active', a.dataset.page === page);
             });
 
-            // Update meta tags and URL hash
+            // Update meta tags
             updateMeta(page);
-            const hash = page === 'home' ? '' : '#' + page;
-            history.pushState({ page }, '', window.location.pathname + hash);
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -952,19 +948,6 @@
                     observer.observe(el);
                 });
             }, 50);
-        }
-
-        // Handle browser back/forward navigation
-        window.addEventListener('popstate', (e) => {
-            const page = (e.state && e.state.page) || 'home';
-            showPage(page);
-        });
-
-        // Load correct page based on URL hash on first visit
-        const initialHash = window.location.hash.replace('#', '');
-        const validPages = ['home', 'trainingen', 'over', 'contact'];
-        if (initialHash && validPages.includes(initialHash)) {
-            showPage(initialHash);
         }
 
         // ===========================
