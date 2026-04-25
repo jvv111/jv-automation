@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Alleen POST toegestaan
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Alleen POST verzoeken toegestaan' });
@@ -88,4 +88,4 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
     console.error('Server fout:', error);
     return res.status(500).json({ error: 'Interne serverfout' });
   }
-}
+};
