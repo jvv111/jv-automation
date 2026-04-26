@@ -68,6 +68,10 @@ Antwoord: "De training is gericht op MKB-bedrijven in Nederland. Of je nu in de 
 Vraag: "Kan ik een vrijblijvend gesprek aanvragen?"
 Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel contact met je op voor een kennismaking."`;
 
+  // TIJDELIJK: zet op true om de rate limit melding te testen, daarna weer op false
+  const testRateLimit = false;
+  if (testRateLimit) return res.status(429).json({ error: 'rate_limit' });
+
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
