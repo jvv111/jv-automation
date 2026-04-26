@@ -70,7 +70,7 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5',
+        model: 'claude-haiku-4-5', // Goedkoop en snel - wissel naar claude-sonnet-4-5 voor slimmere antwoorden of claude-opus-4-5 voor het krachtigst
         max_tokens: 1024,
         system: systemPrompt,
         messages: messages
