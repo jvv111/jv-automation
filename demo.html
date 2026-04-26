@@ -329,6 +329,8 @@
         if (data.reply) {
           addMessage(data.reply, 'bot');
           messages.push({ role: 'assistant', content: data.reply });
+        } else if (data.error === 'rate_limit') {
+          addMessage('Door hoog verbruik is de assistent tijdelijk niet beschikbaar. Probeer het over een paar minuten opnieuw.', 'bot');
         } else {
           addMessage('Er ging iets mis. Probeer het opnieuw.', 'bot');
         }

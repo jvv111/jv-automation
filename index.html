@@ -1237,6 +1237,8 @@
                 if (data.reply) {
                     toolsAddMessage(data.reply, 'bot');
                     toolsHistory.push({ role: 'assistant', content: data.reply });
+                } else if (data.error === 'rate_limit') {
+                    toolsAddMessage('Door hoog verbruik is de assistent tijdelijk niet beschikbaar. Probeer het over een paar minuten opnieuw.', 'bot');
                 } else {
                     toolsAddMessage('Er ging iets mis. Probeer het opnieuw.', 'bot');
                 }

@@ -91,6 +91,9 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
     if (!response.ok) {
       const error = await response.json();
       console.error('Anthropic API fout:', error);
+      if (response.status === 429) {
+        return res.status(429).json({ error: 'rate_limit' });
+      }
       return res.status(500).json({ error: 'Fout bij AI-verzoek' });
     }
 
