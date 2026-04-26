@@ -71,6 +71,10 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5', // Goedkoop en snel - wissel naar claude-sonnet-4-5 voor slimmere antwoorden of claude-opus-4-5 voor het krachtigst
+        // Na aanpassen van het model: sla op en voer dit uit in de terminal:
+        // git add api/chat.js
+        // git commit -m "Model aangepast"
+        // git push
         max_tokens: 1024,
         system: systemPrompt,
         messages: messages
