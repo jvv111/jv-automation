@@ -1146,6 +1146,10 @@
             }, 50);
         }
 
+        // Laad de juiste pagina op basis van de URL bij refresh
+        const startPage = window.location.pathname.replace('/', '').split('/')[0] || 'home';
+        showPage(['home', 'trainingen', 'tools', 'over', 'contact'].includes(startPage) ? startPage : 'home');
+
         // ===========================
         // Mobile nav toggle
         // ===========================
