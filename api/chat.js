@@ -77,8 +77,9 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
   const testRateLimit = false;
   if (testRateLimit) return res.status(429).json({ error: 'rate_limit' });
 
+  // Probeer eerst Anthropic, daarna automatisch OpenAI als fallback
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,22 +98,60 @@ Antwoord: "Zeker! Stuur een mail naar jop@jvautomation.nl. Jop neemt dan snel co
       })
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error('Anthropic API fout:', error);
-      if (response.status === 429) {
-        return res.status(429).json({ error: 'rate_limit' });
-      }
-      return res.status(500).json({ error: 'Fout bij AI-verzoek' });
+    if (anthropicResponse.ok) {
+      const data = await anthropicResponse.json();
+      return res.status(200).json({ reply: data.content[0].text });
     }
 
-    const data = await response.json();
-    const reply = data.content[0].text;
+    // Anthropic mislukt — log de fout en probeer OpenAI
+    const anthropicError = await anthropicResponse.json();
+    console.error('Anthropic mislukt, overschakelen naar OpenAI:', anthropicError);
 
-    return res.status(200).json({ reply });
+    if (anthropicResponse.status === 429) {
+      // Rate limit: ook OpenAI proberen
+      console.log('Anthropic rate limit bereikt, probeer OpenAI...');
+    }
+
+  } catch (err) {
+    console.error('Anthropic verbindingsfout, probeer OpenAI:', err);
+  }
+
+  // Fallback: OpenAI
+  try {
+    const openaiMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages
+    ];
+
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini', // Goedkoop en snel, vergelijkbaar met Haiku
+        max_tokens: 1024,
+        messages: openaiMessages
+      })
+    });
+
+    if (openaiResponse.ok) {
+      const data = await openaiResponse.json();
+      return res.status(200).json({ reply: data.choices[0].message.content });
+    }
+
+    const openaiError = await openaiResponse.json();
+    console.error('OpenAI ook mislukt:', openaiError);
+
+    if (openaiResponse.status === 429) {
+      return res.status(429).json({ error: 'rate_limit' });
+    }
+
+    return res.status(500).json({ error: 'Fout bij AI-verzoek' });
 
   } catch (error) {
-    console.error('Server fout:', error);
+    console.error('Beide AI-diensten mislukt:', error);
     return res.status(500).json({ error: 'Interne serverfout' });
   }
 };
