@@ -1255,5 +1255,215 @@
             input.focus();
         }
     </script>
+
+    <!-- ===========================
+         Chat popup widget
+         =========================== -->
+    <div id="chatWidget">
+
+        <!-- Popup venster -->
+        <div class="chat-popup" id="chatPopup">
+            <div class="chat-popup-header">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div class="chat-popup-avatar"><span class="jv-logo__j">J</span><span class="jv-logo__v">V</span></div>
+                    <div>
+                        <div style="font-weight:600; font-size:14px;">JV Automation</div>
+                        <div style="font-size:11px; color:var(--text-secondary);">Stel gerust een vraag</div>
+                    </div>
+                </div>
+                <button class="chat-popup-close" onclick="toggleChat()">✕</button>
+            </div>
+            <div class="chat-popup-messages" id="popupMessages">
+                <div class="popup-message bot">Hoi! Heb je een vraag over de AI training van Jop? Ik help je graag verder!</div>
+            </div>
+            <div class="chat-popup-input">
+                <input type="text" id="popupInput" placeholder="Stel een vraag..." autocomplete="off" onkeydown="if(event.key==='Enter') popupSend()"/>
+                <button onclick="popupSend()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Knop -->
+        <button class="chat-bubble-btn" id="chatBubbleBtn" onclick="toggleChat()" aria-label="Chat openen">
+            <svg id="iconOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <svg id="iconClose" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span class="chat-bubble-dot" id="chatDot"></span>
+        </button>
+
+    </div>
+
+    <style>
+        #chatWidget { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+
+        .chat-bubble-btn {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--accent); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #0D0B08; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: background 0.2s, transform 0.2s;
+            position: relative;
+        }
+        .chat-bubble-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
+
+        .chat-bubble-dot {
+            position: absolute; top: 6px; right: 6px;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #4caf50; border: 2px solid var(--bg-primary);
+        }
+
+        .chat-popup {
+            width: 320px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+            display: none; flex-direction: column;
+            max-height: 460px; overflow: hidden;
+        }
+        .chat-popup.open { display: flex; }
+
+        .chat-popup-header {
+            padding: 14px 16px; background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .chat-popup-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: var(--bg-card); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 13px;
+        }
+        .chat-popup-close {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: 14px; padding: 4px;
+            transition: color 0.2s;
+        }
+        .chat-popup-close:hover { color: var(--text-primary); }
+
+        .chat-popup-messages {
+            flex: 1; overflow-y: auto; padding: 16px;
+            display: flex; flex-direction: column; gap: 10px;
+            scrollbar-width: thin; scrollbar-color: var(--text-muted) transparent;
+        }
+        .popup-message {
+            max-width: 85%; font-size: 13px; line-height: 1.5; padding: 10px 13px;
+            border-radius: var(--radius-md);
+        }
+        .popup-message.bot {
+            align-self: flex-start; background: var(--bg-card-hover);
+            color: var(--text-primary); border: 1px solid var(--border);
+            border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md);
+        }
+        .popup-message.bot a { color: var(--accent); }
+        .popup-message.bot ul { padding-left: 16px; margin: 4px 0; }
+        .popup-message.bot li { margin-bottom: 3px; }
+        .popup-message.bot strong { font-weight: 600; }
+        .popup-message.user {
+            align-self: flex-end; background: var(--accent);
+            color: #0D0B08; font-weight: 500;
+            border-radius: var(--radius-md) 4px var(--radius-md) var(--radius-md);
+        }
+        .popup-message.loading {
+            align-self: flex-start; background: var(--bg-card-hover);
+            color: var(--text-muted); border: 1px solid var(--border);
+            border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md);
+            font-style: italic; font-size: 12px;
+        }
+
+        .chat-popup-input {
+            padding: 12px; border-top: 1px solid var(--border);
+            background: var(--bg-secondary); display: flex; gap: 8px;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        .chat-popup-input input {
+            flex: 1; padding: 9px 13px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 20px;
+            font-size: 13px; color: var(--text-primary);
+            font-family: var(--font-body); outline: none; transition: border-color 0.2s;
+        }
+        .chat-popup-input input::placeholder { color: var(--text-muted); }
+        .chat-popup-input input:focus { border-color: var(--accent); }
+        .chat-popup-input button {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--accent); border: none; cursor: pointer;
+            color: #0D0B08; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s; flex-shrink: 0;
+        }
+        .chat-popup-input button:hover { background: var(--accent-hover); }
+        .chat-popup-input button:disabled { background: var(--text-muted); cursor: not-allowed; }
+    </style>
+
+    <script>
+        const popupHistory = [];
+
+        function toggleChat() {
+            const popup = document.getElementById('chatPopup');
+            const iconOpen = document.getElementById('iconOpen');
+            const iconClose = document.getElementById('iconClose');
+            const dot = document.getElementById('chatDot');
+            popup.classList.toggle('open');
+            const isOpen = popup.classList.contains('open');
+            iconOpen.style.display = isOpen ? 'none' : 'block';
+            iconClose.style.display = isOpen ? 'block' : 'none';
+            dot.style.display = isOpen ? 'none' : 'block';
+            if (isOpen) document.getElementById('popupInput').focus();
+        }
+
+        function popupRenderMarkdown(text) {
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\[(.+?)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/^[\*\-] (.+)$/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>(\n|$))+/g, (m) => `<ul>${m}</ul>`)
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/^(?!<[uol]|<p)(.+)$/gm, '<p>$1</p>');
+        }
+
+        function popupAddMessage(text, role) {
+            const el = document.getElementById('popupMessages');
+            const div = document.createElement('div');
+            div.className = `popup-message ${role}`;
+            div.innerHTML = role === 'bot' ? popupRenderMarkdown(text) : '';
+            if (role !== 'bot') div.textContent = text;
+            el.appendChild(div);
+            el.scrollTop = el.scrollHeight;
+            return div;
+        }
+
+        async function popupSend() {
+            const input = document.getElementById('popupInput');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            input.disabled = true;
+
+            popupAddMessage(text, 'user');
+            popupHistory.push({ role: 'user', content: text });
+            const loading = popupAddMessage('Bezig met typen...', 'loading');
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: popupHistory })
+                });
+                const data = await res.json();
+                loading.remove();
+                if (data.reply) {
+                    popupAddMessage(data.reply, 'bot');
+                    popupHistory.push({ role: 'assistant', content: data.reply });
+                } else if (data.error === 'rate_limit') {
+                    popupAddMessage('Door hoog verbruik is de assistent tijdelijk niet beschikbaar. Probeer het later opnieuw.', 'bot');
+                } else {
+                    popupAddMessage('Er ging iets mis. Probeer het opnieuw.', 'bot');
+                }
+            } catch (err) {
+                loading.remove();
+                popupAddMessage('Er ging iets mis. Controleer de verbinding.', 'bot');
+            }
+            input.disabled = false;
+            input.focus();
+        }
+    </script>
 </body>
 </html>
