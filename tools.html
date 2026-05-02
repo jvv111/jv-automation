@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools | Probeer de AI-assistent | JV Automation</title>
+    <meta name="description" content="Probeer de AI-assistent van JV Automation. Stel een vraag en zie hoe een chatbot voor jouw bedrijf eruit kan zien.">
+
+    <!-- Geo -->
+    <meta name="geo.region" content="NL-FL">
+    <meta name="geo.country" content="NL">
+    <meta name="geo.placename" content="Flevoland, Nederland">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://www.jvautomation.nl/tools">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.jvautomation.nl/tools">
+    <meta property="og:title" content="Tools | Probeer de AI-assistent | JV Automation">
+    <meta property="og:description" content="Probeer de AI-assistent van JV Automation. Stel een vraag en zie hoe een chatbot voor jouw bedrijf eruit kan zien.">
+    <meta property="og:locale" content="nl_NL">
+    <meta property="og:site_name" content="JV Automation">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tools | Probeer de AI-assistent | JV Automation">
+    <meta name="twitter:description" content="Probeer de AI-assistent van JV Automation.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+    <!-- ====== NAVIGATION ====== -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="jv-logo" aria-label="JV Automation - home">
+                <span class="jv-logo__j">J</span><span class="jv-logo__v">V</span>
+                <div class="jv-logo__divider"></div>
+                <span class="jv-logo__name">Automation</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu openen">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/training">AI training</a></li>
+                <li><a href="/tools" class="active">Tools</a></li>
+                <li><a href="/over">Over mij</a></li>
+                <li><a href="/contact" class="nav-cta">Plan een gesprek</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ====== PAGE: TOOLS ====== -->
+    <main>
+        <header class="page-hero">
+            <div class="container">
+                <div class="page-hero-content fade-in">
+                    <p class="section-label">Tools</p>
+                    <h1>Probeer het zelf uit</h1>
+                    <p class="hero-sub">Stel een vraag aan de AI-assistent van JV Automation. Hij weet alles over de training en helpt je bepalen of het iets voor jouw bedrijf is.</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <div class="container">
+                <div style="display: flex; justify-content: center;">
+                    <div class="tools-chat-wrapper">
+                        <div class="tools-chat-messages" id="toolsMessages">
+                            <div class="tools-message bot">
+                                Hoi! Ik ben de AI-assistent van JV Automation. Ik doe mijn best om je goed te helpen, maar ik kan fouten maken. Twijfel je aan een antwoord? Neem dan contact op met Jop via jop@jvautomation.nl. Heb je een vraag over de AI training? Stel hem gerust!
+                            </div>
+                        </div>
+                        <div class="tools-chat-input">
+                            <input
+                                type="text"
+                                id="toolsInput"
+                                placeholder="Stel een vraag..."
+                                autocomplete="off"
+                                onkeydown="if(event.key==='Enter') toolsSend()"
+                            />
+                            <button onclick="toolsSend()">Verstuur</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top: 0;">
+            <div class="container">
+                <div class="cta-block" style="text-align: center; max-width: 680px; margin: 0 auto;">
+                    <p class="section-label">Wil je dit voor jouw team of klanten?</p>
+                    <h2>Een chatbot zoals deze, maar dan voor <em>jouw bedrijf</em></h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px; font-size: 1.05rem; line-height: 1.7;">
+                        Stel je voor: een assistent die altijd beschikbaar is, jouw producten en diensten kent, en bezoekers precies op het juiste moment doorverwijst. Geen wachttijden, geen gemiste vragen.
+                        <br><br>
+                    </p>
+                    <a href="mailto:jop@jvautomation.nl?subject=Chatbot%20voor%20mijn%20bedrijf" class="btn btn-primary" style="display: inline-block; margin-top: 28px;">
+                        Stuur een mailtje
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="/" class="jv-logo" aria-label="JV Automation - home">
+                        <span class="jv-logo__j">J</span><span class="jv-logo__v">V</span>
+                        <div class="jv-logo__divider"></div>
+                        <span class="jv-logo__name">Automation</span>
+                    </a>
+                    <p>Praktische AI trainingen voor het MKB</p>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/training">AI training</a>
+                    <a href="/over">Over mij</a>
+                    <a href="/contact">Contact</a>
+                </div>
+                <div class="footer-contact">
+                    <a href="mailto:jop@jvautomation.nl">jop@jvautomation.nl</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 JV Automation. Alle rechten voorbehouden.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/shared.js"></script>
+    <script src="/tools.js"></script>
+</body>
+</html>
