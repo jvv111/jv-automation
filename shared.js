@@ -75,6 +75,25 @@ function popupAddMessage(text, role) {
     return div;
 }
 
+function popupTypeMessage(div, text) {
+    const el = document.getElementById('popupMessages');
+    const tokens = text.split(/(\s+)/);
+    let shown = '';
+    let i = 0;
+    return new Promise((resolve) => {
+        function step() {
+            if (i >= tokens.length) { resolve(); return; }
+            shown += tokens[i];
+            i++;
+            div.innerHTML = popupRenderMarkdown(shown);
+            el.scrollTop = el.scrollHeight;
+            if (tokens[i - 1].trim() === '') { step(); return; }
+            setTimeout(step, 35);
+        }
+        step();
+    });
+}
+
 async function popupSend() {
     const input = document.getElementById('popupInput');
     const text = input.value.trim();
@@ -95,7 +114,8 @@ async function popupSend() {
         const data = await res.json();
         loading.remove();
         if (data.reply) {
-            popupAddMessage(data.reply, 'bot');
+            const botDiv = popupAddMessage('', 'bot');
+            await popupTypeMessage(botDiv, data.reply);
             popupHistory.push({ role: 'assistant', content: data.reply });
         } else if (data.error === 'rate_limit') {
             popupAddMessage('Door hoog verbruik is de assistent tijdelijk niet beschikbaar. Probeer het later opnieuw.', 'bot');
